@@ -1,27 +1,13 @@
 """
 Subcontroller module for Alien Invaders
 This module contains the subcontroller to manage a single level or wave in
-the Alien Invaders game.  Instances of Wave represent a single wave. Whenever
-you move to a new level, you are expected to make a new instance of the class.
-The subcontroller Wave manages the ship, the aliens and any laser bolts on
-screen. These are model objects.  Their classes are defined in models.py.
-Most of your work on this assignment will be in either this module or
-models.py. Whether a helper method belongs in this module or models.py is
-often a complicated issue.  If you do not know, ask on Piazza and we will
-answer.
-# Sarika Kannan sk2446 and Eshita Kumar ek536
+the Alien Invaders game. 
 # December 12, 2019
 """
 from game2d import *
 from consts import *
 from models import *
 import random
-
-# PRIMARY RULE: Wave can only access attributes in models.py via getters/setters
-# Wave is NOT allowed to access anything in app.py (Subcontrollers are not
-# permitted to access anything in their parent. To see why, take CS 3152)
-
-
 
 class Wave(object):
     """
@@ -30,48 +16,10 @@ class Wave(object):
     on screen. It animates the laser bolts, removing any aliens as necessary.
     It also marches the aliens back and forth across the screen until they are
     all destroyed or they reach the defense line (at which point the player
-    loses). When the wave is complete, you  should create a NEW instance of
-    Wave (in Invaders) if you want to make a new wave of aliens.
-    If you want to pause the game, tell this controller to draw, but do not
-    update.  See subcontrollers.py from Lecture 24 for an example.  This
-    class will be similar to than one in how it interacts with the main class
-    Invaders.
-    All of the attributes of this class ar to be hidden. You may find that
-    you want to access an attribute in class Invaders. It is okay if you do,
-    but you MAY NOT ACCESS THE ATTRIBUTES DIRECTLY. You must use a getter
-    and/or setter for any attribute that you need to access in Invaders.
-    Only add the getters and setters that you need for Invaders. You can keep
-    everything else hidden.
+    loses).
     """
-        #UPDATE ME LATER
-    #INSTANCE ATTRIBUTES:
-    #    _ship:   the player ship to control [Ship]
-    #    _aliens: the 2d list of aliens in the wave [rectangular 2d list of Alien or None]
-    #    _bolts:  the laser bolts currently on screen [list of Bolt, possibly empty]
-    #    _dline:  the defensive line being protected [GPath]
-    #    _lives:  the number of lives left  [int >= 0]
-    #    _time:   The amount of time since the last Alien "step" [number >= 0]
-    # You may change any of the attributes above, as long as you update the invariant
-    # You may also add any new attributes as long as you document them.
-    # LIST MORE ATTRIBUTES (AND THEIR INVARIANTS) HERE IF NECESSARY
-    #    alienShoot: whether or not it is time for the alien to shoot [boolean value of True or False]
-    #    steps: the number of steps the aliens have taken [int >=0]
-    #    direction: the horizontal direction that the aliens should move in ["left" or "right"]
-    #    givenSteps: the randomized number of the steps the alien should move before firing a bolt [int >= 1 and <= BOLT_RATE]
-    #    shipBolt: the ship bolt currently on the screen [0 if there isn't a bolt and Bolt when there is a bolt]
-    #    shipHit: whether the ship has been hit by an alien bolt [boolean value of True or False]
-    #    con: whether the current state should change to STATE_CONTINUE or not [boolean value of True or False]
-    #    complete: whether the current state shoudl change to STATE_COMPLETE or not [boolean value of True or False]
-    #    score: the score for the game [int >=0]
-    #    barrierStrength: the strength of the defense line [int>=0 and <=100]
-    #    totalAliens: the total number of aliens on the screen [int>=0 and <=ALIEN_ROWS*ALIENS_IN_ROW]
-    #    pew1: the sound object for audio recording of 'pew1.wav' [Sounds object]
-    #    pew2: the sound object for audio recording of 'pew2.wav' [Sounds object]
-    #    blast1: the sound object for audio recording of 'blast1.wav' [Sounds object]
-    #    blast2: the sound object for audio recording of 'blast2.wav' [Sounds object]
-    #    blast3: the sound object for audio recording of 'blast3.wav' [Sounds object]
 
-    # GETTERS AND SETTERS (ONLY ADD IF YOU NEED THEM)
+    # GETTERS AND SETTERS
     def getShipX(self):
         """
         Returns the x attribute of the ship
@@ -227,7 +175,7 @@ class Wave(object):
         assert value<=100
         self.barrierStrength=value
 
-    # INITIALIZER (standard form) TO CREATE SHIP AND ALIENS
+    # INITIALIZER TO CREATE SHIP AND ALIENS
     def __init__(self):
         self._ship=Ship(x=390)
         self._ship.lives=SHIP_LIVES
@@ -244,9 +192,6 @@ class Wave(object):
         self.blast1=Sound('blast1.wav')
         self.blast2=Sound('blast2.wav')
         self.blast3=Sound('blast3.wav')
-
-
-
         self._bolts=[]
         self.steps = 0
         self.alienShoot = False
@@ -256,6 +201,7 @@ class Wave(object):
         self.givenSteps = random.randint(1,BOLT_RATE)
 
         self.drawAliens()
+        
         # UPDATE METHOD TO MOVE THE SHIP, ALIENS, AND LASER BOLTS
     def alienUpdate(self,dt):
         if(self.shipHit==False):
@@ -325,6 +271,7 @@ class Wave(object):
                     self.setComplete(True)
                 self.setShipHit(False)
                 self.setContinue(True)
+    
     # DRAW METHOD TO DRAW THE SHIP, ALIENS, DEFENSIVE LINE AND BOLTS
     def draw(self,view):
         """
@@ -347,6 +294,7 @@ class Wave(object):
             for bolt in self._bolts:
                 bolt.draw(view)
                 self.moveAlienBolt(bolt)
+    
     # HELPER METHODS FOR COLLISION DETECTION
     def drawShip(self):
         """
